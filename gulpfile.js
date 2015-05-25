@@ -5,7 +5,9 @@ var del = require('del');
 
 gulp.task('compile', function () {
   gulp.src(['ts/**/*.ts'])
-    .pipe(typescript())
+    .pipe(typescript({
+      target: "ES6"
+    }))
     .pipe(gulp.dest('build/'));
 });
 

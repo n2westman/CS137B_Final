@@ -1,6 +1,6 @@
 # exclude packages
-/tslint/*
-!/tslint/src/rules/noOptionalParametersRule.ts
+tslint/*
+build/*
 
 # OS Files
 .DS_Store
