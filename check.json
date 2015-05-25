@@ -1,0 +1,7 @@
+{
+  "rules": {
+    "no-any": true,
+    "no-optional-parameters": true,
+    "no-string-literal": true
+  }
+}
