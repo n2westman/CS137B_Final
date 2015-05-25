@@ -11,6 +11,14 @@ gulp.task('compile', function () {
     .pipe(gulp.dest('build/'));
 });
 
+gulp.task('compile:rules', function () {
+  gulp.src(['ts/rules/**/*.ts'])
+    .pipe(typescript({
+      target: "ES6"
+    }))
+    .pipe(gulp.dest('rules/'));
+});
+
 gulp.task('tslint', function () {
   gulp.src('ts/**/*.ts')
     .pipe(tslint({

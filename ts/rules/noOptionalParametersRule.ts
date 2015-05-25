@@ -1,4 +1,4 @@
-/// <reference path="../lib/definitions/tslint.d.ts" />
+/// <reference path="../../lib/definitions/tslint.d.ts" />
 
 export class Rule extends Lint.Rules.AbstractRule {
     public static FAILURE_STRING = "optional parameters forbidden: ";
