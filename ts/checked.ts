@@ -4,7 +4,7 @@
 module ls {
 	export interface Foo {
 		bar: string;
-		baz?: string;
+		//baz?: string;
 	}
 
 	export function Hello(): void {
@@ -14,7 +14,7 @@ module ls {
 	}
 
 	export class Example implements Foo {
-		private x: any = {};
+		//private x: any = {};
 
 		public bar = "";
 		public baz = "";
@@ -23,7 +23,7 @@ module ls {
 			this.bar = "Hello";
 			this.baz = "World";
 
-			this["bar"] = "Hello";
+			//this["bar"] = "Hello";
 
 			return this;
 		}
