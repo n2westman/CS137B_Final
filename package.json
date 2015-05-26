@@ -1,0 +1,22 @@
+{
+  "name": "CS137B_Final",
+  "version": "1.0.0",
+  "description": "Writing a Better Language than TypeScript",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "typescript",
+    "javascript"
+  ],
+  "author": "Nickolas Westman",
+  "license": "ISC",
+  "devDependencies": {
+    "del": "^1.2.0",
+    "gulp": "^3.8.11",
+    "gulp-plumber": "^1.0.1",
+    "gulp-tsc": "^0.9.5",
+    "gulp-tslint": "^3.0.1-beta",
+    "tslint": "^2.2.0-beta"
+  }
+}
