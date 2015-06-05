@@ -2,6 +2,7 @@
   "name": "CS137B_Final",
   "version": "1.0.0",
   "description": "Writing a Better Language than TypeScript",
+  "repository": "https://github.com/n2westman/CS137B_Final.git",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

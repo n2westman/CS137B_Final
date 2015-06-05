@@ -17,4 +17,8 @@ class NoOptionalParametersWalker extends Lint.RuleWalker {
         // call the base version of this visitor to actually parse this node
         super.visitPropertySignature(node);
     }
+    public visitTypeLiteral(node){
+        console.log(node);
+        super.visitTypeLiteral(node);
+    }
 }

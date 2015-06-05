@@ -6,7 +6,7 @@ var del = require('del');
 
 //Compilation
 gulp.task('compile', function () {
-  return gulp.src('ts/**/*.ts')
+  return gulp.src('ts/*.ts')
     .pipe(plumber(function () {}))
     .pipe(tslint({
       configuration: {
@@ -20,7 +20,7 @@ gulp.task('compile', function () {
     }))
     .pipe(tslint.report('verbose'))
     .pipe(typescript({
-      target: "ES6"
+      //target: "ES6"
     }))
     .pipe(gulp.dest('build/'));
 });
@@ -29,7 +29,7 @@ gulp.task('compile', function () {
 gulp.task('compile:rules', function () {
   gulp.src(['ts/rules/**/*.ts'])
     .pipe(typescript({
-      target: "ES6"
+      target: "ES6",
     }))
     .pipe(gulp.dest('rules/'));
 });

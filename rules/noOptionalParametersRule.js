@@ -30,5 +30,9 @@ var NoOptionalParametersWalker = (function (_super) {
         // call the base version of this visitor to actually parse this node
         _super.prototype.visitPropertySignature.call(this, node);
     };
+    NoOptionalParametersWalker.prototype.visitTypeLiteral = function (node) {
+        console.log(node);
+        _super.prototype.visitTypeLiteral.call(this, node);
+    };
     return NoOptionalParametersWalker;
 })(Lint.RuleWalker);
