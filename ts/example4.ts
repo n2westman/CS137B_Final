@@ -17,7 +17,7 @@ export module types {
 	}
 
 	function BluePoint(): ColoredPoint {
-		var a = {};
+		var a = { x: true };
 		return { p: a, color: "blue" }; //Insert constract happen
 	}
 

@@ -19,7 +19,7 @@ module ls {
 	export interface Alex {
 		x: number
 		y: number
-		r?: () => number
+		r?: (boop: any) => number
 	}
 
 	export interface index {

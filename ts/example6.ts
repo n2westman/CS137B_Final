@@ -6,11 +6,10 @@ interface Foo {
 	v(): void;
 }
 
-function Check(item: Foo) {
+function check(item: Foo) {
 	dsl.reflect(item, "Foo");
 }
 
-var a = Object.create(Object);
-a.v = function(arg) { };
+var a = {v: function(arg) { } };
 
-Check(a);
+check(a);

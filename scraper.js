@@ -24,8 +24,6 @@ function scrapeInterfaces(sourceFile, fileString) {
              * I know it's likely because of the desire to sourcemap, which is cool and all, but your solution is a pain.
              **/
 
-            
-
             if(node.heritageClauses) { //extends clauses.  
                 var extendList = interfaces[node.name.text]["_extends"] = interfaces[node.name.text]["_extends"] || [];
                 for(var i = 0; i < node.heritageClauses.length; i++) {
@@ -37,7 +35,6 @@ function scrapeInterfaces(sourceFile, fileString) {
                         }
                     }
                 }
-                //console.log(extendList);
             }
 
             
@@ -80,9 +77,18 @@ function scrapeInterfaces(sourceFile, fileString) {
         }
 
         obj.type = fileString.substring(member.type.pos, member.type.end).trim(); //Property / Return type.
-        if (obj.type[0] == '(') {
-            obj.propertyType = obj.type = "function";
+        if (obj.type[0] == '(') { //anon function type
+            obj.propertyType = "function";
+
+            obj.parameters = [];
+            member.type.parameters.forEach(function (parameter) {
+                obj.parameters.push(parameter.name.text);
+            });
+            var split = obj.type.split(">");
+            obj.type = split[split.length-1].trim();
         }
+
+
         interfaces[iname][name] = obj;
     }
 }
@@ -112,9 +118,7 @@ fileNames.forEach(function (fileName) {
       if (interfacesFile.hasOwnProperty(key)) {
         interfacesFile[key] = newOutput[key];
       }
-    } 
-
-    //console.log(interfacesFile);
+    }
 
     program.emit();
 });
