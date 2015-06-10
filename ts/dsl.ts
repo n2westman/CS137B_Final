@@ -60,7 +60,7 @@ function reflectHelper2(o: Object, interfaceName: string) {
     }
   });
 
-  var extendList: string[] = <string[]>def["_extends"];
+  var extendList: string[] = (<any>def)["_extends"];
   if(!extendList) {
     return;
   }
@@ -91,7 +91,7 @@ function checkProperty(o: Object, def: InterfaceDefinition, property_name: strin
       var keys = Object.keys(o);
       keys.forEach(function(key) {
         if (prop.indexType === "number") {
-          if (!isNaN(key)) {
+          if (!isNaN(+key)) {
             reflectHelper(o[key], prop.type);
           }
         } else { //index type must be string

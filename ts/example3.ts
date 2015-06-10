@@ -1,3 +1,5 @@
+//The danger of any, and split interfaces
+
 import dsl = require("./dsl");
 
 module Blegh {
@@ -18,18 +20,21 @@ module Blegh {
 		y: number
 	}
 
-	export interface Bar extends Foo {
-		id: number
-	}
-
 	export function Bloop(a: Bar): void {
 		dsl.reflect(a, 'Bar');
 	}
 }
 
-var a = Object.create(null);
+var a: any = {};
 a.id = "hello";
 a.val = 42;
-//a.x = 10;
+a.x = 10;
+a.blah = 12;
 
-Blegh.Bloop(a);
+try {
+	Blegh.Bloop(a);
+} catch (e) {
+	console.log(e.message);
+} finally {
+	console.log("Should have caught an error saying that we're missing property y");
+}

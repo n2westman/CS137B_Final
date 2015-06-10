@@ -1,3 +1,4 @@
+//Example 2 - type forcing problems
 import dsl = require("./dsl");
 
 module Blegh {
@@ -12,4 +13,9 @@ module Blegh {
 }
 
 var a = { val: 42 };
-Blegh.Bloop(<Blegh.Foo>a);
+try {
+	Blegh.Bloop(<Blegh.Foo>a);
+} catch (e) {
+	console.log("Caught Forced Type");
+	console.log(e.message);
+}

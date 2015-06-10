@@ -94,7 +94,7 @@ function scrapeInterfaces(sourceFile, fileString) {
 }
 
 function allSubsequentNodes(node) {
-    console.log("here");
+    //console.log("here");
     if(!node.parent) {
         return;
     }
@@ -106,12 +106,13 @@ fileNames.forEach(function (fileName) {
     // Parse a file
     var program = ts.createProgram([fileName], {
         outDir: fileName.replace("ts", "build").replace(/\..*$/, ''),
+        module: 1,
     });
     var sourceFile = program.getSourceFile(fileName);
     // delint it
     scrapeInterfaces(sourceFile, fs.readFileSync(fileName, 'utf8'));
 
-    var newOutput = ts.createSourceFile("ts/interfaces.ts", "exports.interfaces = " + JSON.stringify(interfaces, null, '  ') + ";\n", 1 /* ES5 */, true);
+    var newOutput = ts.createSourceFile("ts/interfaces.ts", "export var interfaces: any = " + JSON.stringify(interfaces, null, '  ') + ";\n", 1 /* ES5 */, true);
     var interfacesFile = program.getSourceFile("ts/interfaces.ts");
     
     for (var key in interfacesFile) { //Use JS pointers to rewrite the data structure. Prints out a proper interfaces file.
@@ -120,5 +121,12 @@ fileNames.forEach(function (fileName) {
       }
     }
 
-    program.emit();
+    var emitResult = program.emit();
+    var allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
+
+    allDiagnostics.forEach(function( diagnostic) {
+        var obj = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start); //{line, character}
+        var message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+        console.log(diagnostic.file.fileName + '(' + (obj.line + 1) + ', ' + (obj.character +1) + '): ' + message);
+    });
 });
