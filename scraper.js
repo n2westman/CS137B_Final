@@ -2,9 +2,9 @@
 /// <reference path="../lib/definitions/typescriptServices.d.ts" />
 var fs = require('fs');
 var ts = require('typescript');
+var _ = require('underscore');
 
 var interfaces = {};
-var once = 0;
 
 function scrapeInterfaces(sourceFile, fileString) {
     scrapeNode(sourceFile);
@@ -35,17 +35,11 @@ function scrapeInterfaces(sourceFile, fileString) {
                         }
                     }
                 }
-            }
-
-            
+            }            
 
             node.members.forEach(function(member) { 
                 processMember(member, node.name.text);
             });
-            if(once === 0) {
-                allSubsequentNodes(node);
-                once = 1;
-            }
         }
         ts.forEachChild(node, scrapeNode);
     }
@@ -93,11 +87,67 @@ function scrapeInterfaces(sourceFile, fileString) {
     }
 }
 
-function allSubsequentNodes(node) {
-    //console.log("here");
-    if(!node.parent) {
-        return;
+function incrementNodesAfter(node, distance, start){
+    if (node.pos >= start) {
+        node.pos += distance;
     }
+    if (node.end > start) {
+        node.end += distance;
+    }
+
+    ts.forEachChild(node, function(node) {
+        incrementNodesAfter(node, distance, start);
+    });
+}
+
+function incrementAllNodes(node, toAdd) {
+    node.pos += toAdd;
+    node.end += toAdd;
+
+    ts.forEachChild(node, function(node) {
+        incrementAllNodes(node, toAdd);
+    });
+}
+
+function insertSubTree(main, sub, index) {
+    main.nodeCount += sub.nodeCount;
+    _.extend(main.identifiers, sub.identifiers)
+    main.identifierCount = Object.keys(main.identifiers).length;
+
+    incrementNodesAfter(main, sub.end, index);
+    incrementAllNodes(sub, index);
+
+    if (main.SyntaxKind === ts.SyntaxKind.SourceFile) {
+        main.endOfFileToken.pos += sub.end;
+        main.endOfFileToken.end += sub.end;
+    }
+
+    //Putting statements together
+    main.text = main.text.substring(0, index) + sub.text + main.text.substring(index);
+    mergeStatements(main.statements, sub.statements);
+    main.statements.end = main.statements[main.statements.length-1].end;
+}
+
+//merge list l2 into l1
+function mergeStatements(l1, l2){
+    var temp = [];
+    while(l1.length && l2.length) {
+        if(l1[0].pos < l2[0].pos) {
+            temp.push(l1.shift());
+        } else {
+            temp.push(l2.shift());
+        }
+    }
+    while(l1.length) {
+        temp.push(l1.shift());
+    }
+    while(l2.length) {
+        temp.push(l2.shift());
+    }
+    console.log(temp);
+    temp.forEach(function(s) {
+        l1.push(s);
+    })
 
 }
 
@@ -109,7 +159,15 @@ fileNames.forEach(function (fileName) {
         module: 1,
     });
     var sourceFile = program.getSourceFile(fileName);
-    // delint it
+    //var extra = ts.createSourceFile("blah", "console.log(\"Hello World\");var ex = 3;");
+
+    //console.log(sourceFile);
+
+    //insertSubTree(sourceFile, extra, sourceFile.statements[3].end);
+
+    //console.log(sourceFile);
+    //console.log(sourceFile.statements[sourceFile.statements.length-1].declarationList);
+
     scrapeInterfaces(sourceFile, fs.readFileSync(fileName, 'utf8'));
 
     var newOutput = ts.createSourceFile("ts/interfaces.ts", "export var interfaces: any = " + JSON.stringify(interfaces, null, '  ') + ";\n", 1 /* ES5 */, true);

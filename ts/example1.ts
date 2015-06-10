@@ -16,3 +16,7 @@ try {
 	console.log("Properly Caught Bad Interface");
 	console.log(e.message);
 }
+
+var x = function(e) {
+	console.log("hi");
+}

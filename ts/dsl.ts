@@ -32,6 +32,9 @@ export interface InterfaceList {
 var arr;
 //Entry point. Initializes our list to resolve circular dependencies
 export function reflect (o: Object, interfaceName: string) {
+  if (interfaceName === "boolean" || interfaceName === "number" || interfaceName === "string") {
+    return (interfaceName === typeof o);
+  }
   arr = [];
   reflectHelper(o, interfaceName);
 };
